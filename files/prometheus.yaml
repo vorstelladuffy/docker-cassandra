@@ -1,0 +1,84 @@
+---
+hostPort: 127.0.0.1:7199
+startDelaySeconds: 0
+lowercaseOutputLabelNames: true
+lowercaseOutputName: true
+#rules:
+#- pattern: org.apache.cassandra.metrics<type=(Connection|Streaming), scope=(\S*), name=(\S*)><>(Count|Value)
+#  name: cassandra_$1_$3
+#  labels:
+#    address: "$2"
+
+# org.apache.cassandra.metrics<type=ClientRequest, scope=Read-THREE, name=Timeouts><>FifteenMinuteRate)
+# org.apache.cassandra.metrics<type=ClientRequest, scope=Write-ANY, name=Unavailables><>FifteenMinuteRate
+#- pattern: org\.apache\.cassandra\.metrics<type=ClientRequest, scope=(Write|Read), name=(\S*)><>([a-zA-Z0-9]+)?
+#  name: cassandra_clientrequest_$2
+#  labels:
+#    scope: "$1"
+#    metric: "$3"
+
+# org.apache.cassandra.metrics<type=Keyspace, keyspace=foo, name=CompressionMetadataOffHeapMemoryUsed><>Value
+# org.apache.cassandra.metrics<type=ColumnFamily, keyspace=dse_leases, scope=logs, name=KeyCacheHitRate><>Value
+# org.apache.cassandra.metrics<type=Table, keyspace=system_schema, scope=indexes, name=LiveScannedHistogram><>98thPercentile
+#- pattern: org\.apache\.cassandra\.metrics<type=Keyspace, keyspace=(?!(system|dse|solr))(\S*), name=(\S*)><>([a-zA-Z0-9]+)?
+#  name: cassandra_keyspace_$3
+#  labels:
+#    keyspace: "$2"
+#    metric: "$4"
+
+# org.apache.cassandra.metrics<type=ColumnFamily, keyspace=dse_leases, scope=logs, name=KeyCacheHitRate><>Value
+# org.apache.cassandra.metrics<type=Table, keyspace=system_schema, scope=indexes, name=LiveScannedHistogram><>98thPercentile
+#- pattern: org\.apache\.cassandra\.metrics<type=(ColumnFamily|Table), keyspace=(?!(system|dse|solr))(\S*)(?:, scope=(\S*))?, name=(\S*)><>([a-zA-Z0-9]+)?
+#  name: cassandra_$1_$5
+#  labels:
+#    table: "$4"
+#    keyspace: "$3"
+#    metric: "$6"
+
+# org.apache.cassandra.metrics<type=DroppedMessage, scope=BATCH_STORE, name=CrossNodeDroppedLatency><>Count
+#- pattern: org\.apache\.cassandra\.metrics<type=(?!(ColumnFamily|Table|Keyspace|ClientRequest))(\S*), scope=(\S*), name=(\S*)><>([a-zA-Z0-9]+)?
+#  name: cassandra_$2_$4
+#  labels:
+#    scope: "$3"
+#    metric: "$5"
+
+# org.apache.cassandra.db<type=Tables, keyspace=system, table=views_builds_in_progress><>UnleveledSSTables
+# org.apache.cassandra.db<type=ColumnFamilies, keyspace=system, columnfamily=batches><>DroppableTombstoneRatio
+#- pattern: org\.apache\.cassandra\.db<type=(\S*), keyspace=(?!(system|dse|solr))(\S*), (columnfamily|table)=(\S*)><>([a-zA-Z0-9]+)?
+#  name: cassandra_$1
+#  labels:
+#    keyspace: "$2"
+#    table: "$3"
+#    metric: "$4"
+
+#- pattern: com.datastax.bdp<type=(Connection|Streaming), scope=(\S*), name=(\S*)><>(Count|Value)
+#  name: dse_$1_$3
+#  labels:
+#    address: "$2"
+
+#- pattern: com.datastax.bdp<type=(\S*)(?:, ((?!scope)\S*)=(\S*))?(?:, scope=(\S*))?, name=(\S*)><>([a-zA-Z0-9]+)?
+#  name: dse_$1_$5
+#  labels:
+#    "$1": "$4"
+#    "$2": "$3"
+#    metric: "$6"
+
+# solr/sit1_pb.transactions<type=solr_query, id=com.datastax.bdp.search.solr.handler.component.CqlSearchHandler><>95thPcRequestTime
+#- pattern: solr\/(\S*)?<type=(\S*)?, id=\S*\.(\S*)?><>([a-zA-Z0-9]+)?
+#  name: dse_search_$3
+#  labels:
+#    columnfamily: "$1"
+#    metric: "$4"
+
+# # com.datastax.bdp<type=metrics, scope=search, index=sit1_pb.transactions, metricType=QueryMetrics, phase=EXECUTE, name=Latency><>99thPercentile)
+# - pattern: com.datastax.bdp<type=(\S*)(?:, ((?!scope)\S*)=(\S*))?(?:, scope=(\S*))?, name=(\S*)><>(\S*)?
+#   name: dse_$1_$5_$6
+#   labels:
+#     "$1": "$4"
+#     "$2": "$3"
+
+# HELP com_datastax_bdp_metrics_99thpercentile Attribute exposed for management (com.datastax.bdp<type=metrics, scope=search, index=sit1_pb.pending_transactions, metricType=QueryMetrics, phase=EXECUTE, name=Latency><>99thPercentile)
+# TYPE com_datastax_bdp_metrics_99thpercentile gauge
+# com_datastax_bdp_metrics_99thpercentile{scope="search",index="sit1_pb.pending_transactions",metrictype="QueryMetrics",phase="EXECUTE",name="Latency",} 50271.0
+
+# - pattern: ".*"

@@ -1,10 +1,10 @@
 # vim:set ft=dockerfile:
-FROM cassandra:2.1
+FROM cassandra:2.1.8
 
-COPY files/metrics.yaml /
-COPY files/metrics-kafka-0.0.1.jar /
-RUN rm /usr/share/cassandra/lib/reporter-config*
-COPY files/reporter-config-base-3.0.3.jar /
-COPY files/reporter-config3-3.0.3.jar /
+RUN apt-get update && apt-get -y --force-yes install --no-install-recommends sysstat curl
+COPY files/cassandra.yaml /etc/cassandra
+COPY files/prometheus.yaml /etc/cassandra
+COPY files/jmx_prometheus_javaagent-0.2.0.jar /usr/share/cassandra/lib
+COPY files/perf.sh /
 
-CMD ["cassandra", "-f"]
+CMD ["/perf.sh"]
